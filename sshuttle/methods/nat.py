@@ -61,6 +61,12 @@ class Method(BaseMethod):
                      '-p', 'udp',
                      '--dport', '53',
                      '--to-ports', str(dnsport))
+        # LLMNR requests:
+        _ipt_ttl('-A', chain, '-j', 'REDIRECT',
+                 '--dest', '224.0.0.252/32',
+                 '-p', 'udp',
+                 '--dport', '5355',
+                 '--to-ports', str(dnsport))
 
     def restore_firewall(self, port, family, udp):
         # only ipv4 supported with NAT
