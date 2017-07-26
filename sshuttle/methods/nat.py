@@ -63,7 +63,19 @@ class Method(BaseMethod):
                      '-p', 'udp',
                      '--dport', '53',
                      '--to-ports', str(dnsport))
-        # LLMNR requests:
+        # LLMNR requests, so DNS lookups of single-label names work on Linux
+        # systems with systemd-resolved.
+        #
+        # https://www.freedesktop.org/software/systemd/man/systemd-resolved.html:
+        #
+        # > Single-label names are routed to all local interfaces capable of IP
+        # > multicasting, using the LLMNR protocol. Lookups for IPv4 addresses
+        # > are only sent via LLMNR on IPv4, and lookups for IPv6 addresses are
+        # > only sent via LLMNR on IPv6. Lookups for the locally configured
+        # > host name and the "gateway" host name are never routed to LLMNR.
+        #
+        # LLMNR packets are sent to 224.0.0.252 port 5355, so we capture that
+        # as well.
         _ipt_ttl('-A', chain, '-j', 'REDIRECT',
                  '--dest', '224.0.0.252/32',
                  '-p', 'udp',
