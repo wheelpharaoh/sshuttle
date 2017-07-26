@@ -1,8 +1,8 @@
 import socket
-from subprocess import check_call, CalledProcessError
+from subprocess import check_output, CalledProcessError, STDOUT
 
 from sshuttle.firewall import subnet_weight
-from sshuttle.helpers import family_to_string
+from sshuttle.helpers import family_to_string, debug1
 from sshuttle.linux import ipt, ipt_ttl, ipt_chain_exists, nonfatal
 from sshuttle.methods import BaseMethod
 
@@ -72,10 +72,13 @@ class Method(BaseMethod):
         # Flush conntrack, since that prevents that LLMNR rule from being
         # applied:
         try:
-            check_call(["conntrack", "-D", "--dst", "224.0.0.252"])
-        except CalledProcessError:
+            msg = check_output(["conntrack", "-D", "--dst", "224.0.0.252"],
+                               stderr=STDOUT)
+        except CalledProcessError as e:
+            msg = e.output
             # If there are no entries this gives exit code of 1.
             pass
+        debug1(msg)
 
     def restore_firewall(self, port, family, udp):
         # only ipv4 supported with NAT
