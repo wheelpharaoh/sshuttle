@@ -1,4 +1,6 @@
 import socket
+from subprocess import check_call
+
 from sshuttle.firewall import subnet_weight
 from sshuttle.helpers import family_to_string
 from sshuttle.linux import ipt, ipt_ttl, ipt_chain_exists, nonfatal
@@ -67,6 +69,9 @@ class Method(BaseMethod):
                  '-p', 'udp',
                  '--dport', '5355',
                  '--to-ports', str(dnsport))
+        # Flush conntrack, since that prevents that LLMNR rule from being
+        # applied:
+        check_call(["conntrack", "-D", "--dst", "224.0.0.252"])
 
     def restore_firewall(self, port, family, udp):
         # only ipv4 supported with NAT
