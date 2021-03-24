@@ -10,6 +10,7 @@ def original_dst(sock):
     try:
         SO_ORIGINAL_DST = 80
         SOCKADDR_MIN = 16
+        print('sockaddr_in: ', sockaddr_in)
         sockaddr_in = sock.getsockopt(socket.SOL_IP,
                                       SO_ORIGINAL_DST, SOCKADDR_MIN)
         (proto, port, a, b, c, d) = struct.unpack('!HHBBBB', sockaddr_in[:8])
