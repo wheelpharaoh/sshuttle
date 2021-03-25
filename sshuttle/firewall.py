@@ -1,4 +1,5 @@
 import errno
+import re
 import socket
 import signal
 import sshuttle.ssyslog as ssyslog
@@ -10,6 +11,7 @@ from sshuttle.helpers import debug1, debug2, Fatal
 from sshuttle.methods import get_auto_method, get_method
 
 HOSTSFILE = '/etc/hosts'
+envoy_filter_net_regex = r"127\.0\.[1-9]"
 
 
 def rewrite_etc_hosts(hostmap, port):
@@ -32,6 +34,9 @@ def rewrite_etc_hosts(hostmap, port):
     f = open(tmpname, 'w')
     for line in old_content.rstrip().split('\n'):
         if line.find(APPEND) >= 0:
+            continue
+        net_match = re.match(regex, line)
+        if net_match:
             continue
         f.write('%s\n' % line)
     for (name, ip) in sorted(hostmap.items()):
