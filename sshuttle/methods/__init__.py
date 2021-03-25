@@ -13,7 +13,7 @@ def original_dst(sock):
         sockaddr_in = sock.getsockopt(socket.SOL_IP,
                                       SO_ORIGINAL_DST, SOCKADDR_MIN)
         (proto, proto, a, b, c, d) = struct.unpack('!HHBBBB', sockaddr_in[:8])
-        debug1('proto: %r, port %r\n' % proto, proto)
+        debug1('proto: %s, port %s\n' % proto, proto)
         # FIXME: decoding is IPv4 only.
         assert(socket.htons(proto) == socket.AF_INET)
         ip = '%d.%d.%d.%d' % (a, b, c, d)
