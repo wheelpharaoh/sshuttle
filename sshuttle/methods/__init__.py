@@ -3,7 +3,7 @@ import importlib
 import socket
 import struct
 import errno
-from sshuttle.helpers import Fatal, debug3
+from sshuttle.helpers import Fatal, debug3, debug1
 
 
 def original_dst(sock):
