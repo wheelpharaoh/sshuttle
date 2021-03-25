@@ -343,7 +343,7 @@ def onaccept_tcp(listener, method, mux, handlers):
         else:
             raise
 
-    debug1('method: %r\n' % method)
+    debug1('method: %r\n' % method.name)
     dstip = method.get_tcp_dstip(sock)
     debug1('Accept TCP: %s:%r -> %s:%r.\n' % (srcip[0], srcip[1],
                                               dstip[0], dstip[1]))

@@ -19,6 +19,7 @@ def rewrite_etc_hosts(hostmap, port):
     st = None
     try:
         old_content = open(HOSTSFILE).read()
+        debug1('old_content: %r\n' % old_content)
         st = os.stat(HOSTSFILE)
     except IOError as e:
         if e.errno == errno.ENOENT:
