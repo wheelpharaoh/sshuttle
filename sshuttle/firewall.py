@@ -35,8 +35,9 @@ def rewrite_etc_hosts(hostmap, port):
     for line in old_content.rstrip().split('\n'):
         if line.find(APPEND) >= 0:
             continue
+        debug1('checking regex match')
         net_match = re.match(envoy_filter_net_regex, line)
-        debug1('re match?t: %r\n' % net_match)
+        debug1('re match?: %r\n' % net_match)
         if net_match:
             continue
         f.write('%s\n' % line)
