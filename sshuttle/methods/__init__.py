@@ -10,9 +10,9 @@ def original_dst(sock):
     try:
         SO_ORIGINAL_DST = 80
         SOCKADDR_MIN = 16
-        debug1('sockaddr_in: %r\n' % sockaddr_in)
         sockaddr_in = sock.getsockopt(socket.SOL_IP,
                                       SO_ORIGINAL_DST, SOCKADDR_MIN)
+        debug1('sockaddr_in: %r\n' % sockaddr_in)
         (proto, port, a, b, c, d) = struct.unpack('!HHBBBB', sockaddr_in[:8])
         # FIXME: decoding is IPv4 only.
         assert(socket.htons(proto) == socket.AF_INET)
